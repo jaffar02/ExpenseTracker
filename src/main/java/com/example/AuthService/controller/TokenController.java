@@ -6,6 +6,7 @@ import com.example.AuthService.request.RefreshTokenRequestDto;
 import com.example.AuthService.response.JWTResponseDto;
 import com.example.AuthService.service.JwtService;
 import com.example.AuthService.service.RefreshTokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
+@Slf4j
 public class TokenController {
     @Autowired
     private RefreshTokenService refreshTokenService;
@@ -49,17 +51,34 @@ public class TokenController {
     /**
      * Called when access token is expired but refresh token is valid and alive
      */
+//    @PostMapping("auth/v1/refreshToken")
+//    public JWTResponseDto refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+//        return refreshTokenService.findByToken(refreshTokenRequestDto.getToken())
+//                .map(refreshTokenService::verifyExpiration)
+//                .map(RefreshToken::getUserInfo)
+//                .map(userInfo -> {
+//                    String accessToken = jwtService.generateToken(userInfo.getUsername());
+//                    return JWTResponseDto.builder()
+//                            .accessToken(accessToken)
+//                            .token(refreshTokenRequestDto.getToken())
+//                            .build();
+//                }).orElseThrow(() -> new RuntimeException("Refresh token invalid."));
+//    }
     @PostMapping("auth/v1/refreshToken")
-    public JWTResponseDto refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-        return refreshTokenService.findByToken(refreshTokenRequestDto.getToken())
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUserInfo)
-                .map(userInfo -> {
-                    String accessToken = jwtService.generateToken(userInfo.getUsername());
-                    return JWTResponseDto.builder()
-                            .accessToken(accessToken)
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+        try {
+            return refreshTokenService.findByToken(refreshTokenRequestDto.getToken())
+                    .map(refreshTokenService::verifyExpiration)
+                    .map(RefreshToken::getUserInfo)
+                    .map(userInfo -> ResponseEntity.ok(JWTResponseDto.builder()
+                            .accessToken(jwtService.generateToken(userInfo.getUsername()))
                             .token(refreshTokenRequestDto.getToken())
-                            .build();
-                }).orElseThrow(() -> new RuntimeException("Refresh token invalid."));
+                            .build()))
+                    .orElseThrow(() -> new RuntimeException("Refresh token invalid."));
+        } catch (Exception e) {
+            log.error("Unexpected exception: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
- }
+
+}

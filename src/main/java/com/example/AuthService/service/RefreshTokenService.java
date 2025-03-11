@@ -22,12 +22,21 @@ public class RefreshTokenService {
 
     public RefreshToken createRefreshToken(String username) {
         UserInfo userInfoExtracted = userInfoRepository.findByUsername(username);
-        RefreshToken refreshToken = RefreshToken.builder()
+        Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserInfo(userInfoExtracted);
+
+        RefreshToken newRefreshToken = RefreshToken.builder()
                 .userInfo(userInfoExtracted)
                 .token(UUID.randomUUID().toString())
                 .expiryDate(Instant.now().plusMillis(600000))
                 .build();
-        return refreshTokenRepository.save(refreshToken);
+
+        if (existingToken.isPresent()) {
+            existingToken.get().setToken(newRefreshToken.getToken());
+            existingToken.get().setExpiryDate(Instant.now().plusMillis(600000));
+            return refreshTokenRepository.save(existingToken.get());
+        }else {
+            return refreshTokenRepository.save(newRefreshToken);
+        }
     }
 
     public RefreshToken verifyExpiration(RefreshToken token) {

@@ -39,7 +39,7 @@ public class AuthSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable).cors(CorsConfigurer::disable) // Disable CSRF for APIs
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless sessions
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/v1/login", "/auth/v1/refreshToken", "auth/v1/signup").permitAll() // Public endpoints
+                        .requestMatchers("/auth/v1/login", "/auth/v1/refreshToken", "/auth/v1/signup").permitAll() // Public endpoints
                         .anyRequest().authenticated() // Protect all other endpoints
                 )
                 .httpBasic(Customizer.withDefaults())

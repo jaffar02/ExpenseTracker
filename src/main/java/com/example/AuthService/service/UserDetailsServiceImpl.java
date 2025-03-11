@@ -39,8 +39,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public Boolean signupUser(UserInfoDto userInfoDto) throws IllegalArgumentException{
-        if (!UserInfoInputValidation.isEmailValid(userInfoDto.getEmail())){
-            throw new IllegalArgumentException("Invalid email format.");
+        if (!userInfoDto.getEmail().isEmpty()) {
+            if (!UserInfoInputValidation.isEmailValid(userInfoDto.getEmail())){
+                throw new IllegalArgumentException("Invalid email format.");
+            }
         }
 
         if (!UserInfoInputValidation.isPasswordValid(userInfoDto.getPassword())){

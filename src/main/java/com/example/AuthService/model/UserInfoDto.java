@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserInfoDto extends UserInfo {
-    private String username;
     private String lastname;
     private Long phoneNumber;
     private String email;
