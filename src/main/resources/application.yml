@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/authservice
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10  # Optional: you can adjust based on your requirement
+    continue-on-error: true
+    initialize: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # Optional: use 'none', 'update', 'create', or 'create-drop'
+    show-sql: true      # Optional: shows SQL queries in the console during development
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect

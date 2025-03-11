@@ -5,15 +5,18 @@ import com.example.AuthService.model.UserInfoDto;
 import com.example.AuthService.repository.UserInfoRepository;
 import com.example.AuthService.util.UserInfoInputValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.UUID;
 
+@Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired

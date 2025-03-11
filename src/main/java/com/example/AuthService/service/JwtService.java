@@ -22,7 +22,7 @@ public class JwtService {
         return createToken(claims, username);
     }
 
-    public String createToken(Map<String, Object> claims, String username) {
+    private String createToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .subject(username)
                 .claims().add(claims)
