@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/authservice
+    url: jdbc:postgresql://localhost:5432/userservice
     username: postgres
     password: 123456
     driver-class-name: org.postgresql.Driver
@@ -11,22 +11,31 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # Optional: use 'none', 'update', 'create', or 'create-drop'
+      ddl-auto: create  # Optional: use 'none', 'update', 'create', or 'create-drop'
     show-sql: true      # Optional: shows SQL queries in the console during development
     properties:
       hibernate:
         format_s  ql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-kafka:
-  topic:
-    name: testing_json
-  producer:
+  kafka:
     bootstrap-servers: localhost:2181
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: AuthService.serializer.UserInfoSerializer
+    consumer:
+      group-id: userinfo-consumer-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: com.example.userservice.deserializer.UserInfoDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: *
+    topic:
+      name: testingself_json
 
-#  consumer:
+#  topic:
+#    name: testing_json
+#  producer:
 #    bootstrap-servers: localhost:2181
-#    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    value-serializer: AuthService.serializer.UserInfoSerializer
+
