@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/authservice
@@ -20,11 +22,11 @@ spring:
 
 kafka:
   topic:
-    name: testing_json
+    name: testingself_json
   producer:
-    bootstrap-servers: localhost:2181
+    bootstrap-servers: localhost:9092
     key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: AuthService.serializer.UserInfoSerializer
+    value-serializer: com.example.AuthService.serializer.UserInfoSerializer
 
 #  consumer:
 #    bootstrap-servers: localhost:2181

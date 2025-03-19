@@ -57,19 +57,6 @@ public class TokenController {
     /**
      * Called when access token is expired but refresh token is valid and alive
      */
-//    @PostMapping("auth/v1/refreshToken")
-//    public JWTResponseDto refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-//        return refreshTokenService.findByToken(refreshTokenRequestDto.getToken())
-//                .map(refreshTokenService::verifyExpiration)
-//                .map(RefreshToken::getUserInfo)
-//                .map(userInfo -> {
-//                    String accessToken = jwtService.generateToken(userInfo.getUsername());
-//                    return JWTResponseDto.builder()
-//                            .accessToken(accessToken)
-//                            .token(refreshTokenRequestDto.getToken())
-//                            .build();
-//                }).orElseThrow(() -> new RuntimeException("Refresh token invalid."));
-//    }
     @PostMapping("auth/v1/refreshToken")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
         try {
