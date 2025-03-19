@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class UserConfig {
+
     @Bean
     ObjectMapper getObjectMapper() {
         return new ObjectMapper();

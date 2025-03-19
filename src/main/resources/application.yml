@@ -19,7 +19,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
-    bootstrap-servers: localhost:2181
+    bootstrap-servers: localhost:9092
     consumer:
       group-id: userinfo-consumer-group
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -28,7 +28,7 @@ spring:
         spring:
           json:
             trusted:
-              packages: *
+              packages: "com.example.userservice"
     topic:
       name: testingself_json
 

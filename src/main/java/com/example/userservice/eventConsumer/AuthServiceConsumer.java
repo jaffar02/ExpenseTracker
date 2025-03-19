@@ -16,10 +16,10 @@ public class AuthServiceConsumer {
         this.userRepository = userRepository;
     }
 
-    @KafkaListener(topics = "${spring.kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${spring.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
     public void listen(Object eventData) {
         try {
-
+            log.info("Received message: {}", eventData);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

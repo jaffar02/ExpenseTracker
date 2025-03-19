@@ -13,7 +13,6 @@ import java.util.Map;
 @Slf4j
 public class UserInfoDeserializer implements Deserializer<UserInfoDto> {
 
-    @Autowired
     ObjectMapper objectMapper;
 
     @Override
@@ -24,6 +23,7 @@ public class UserInfoDeserializer implements Deserializer<UserInfoDto> {
     @Override
     public UserInfoDto deserialize(String s, byte[] bytes) {
         UserInfoDto userInfoDto = null;
+        objectMapper = new ObjectMapper();
         try {
             userInfoDto = objectMapper.readValue(bytes, UserInfoDto.class);
         } catch (Exception e) {
