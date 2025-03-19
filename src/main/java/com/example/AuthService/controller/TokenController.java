@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,17 +35,22 @@ public class TokenController {
      */
     @PostMapping("auth/v1/login")
     public ResponseEntity AuthenticateAndGetToken(@RequestBody AuthRequestDto authRequestDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequestDto.getUsername(), authRequestDto.getPassword())
-        );
-        if (authentication.isAuthenticated()) {
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDto.getUsername());
-            return new ResponseEntity(JWTResponseDto.builder()
-                    .accessToken(jwtService.generateToken(authRequestDto.getUsername()))
-                    .token(refreshToken.getToken())
-                    .build(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity("Could not authenticate", HttpStatus.BAD_REQUEST);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequestDto.getUsername(), authRequestDto.getPassword())
+            );
+            if (authentication.isAuthenticated()) {
+                RefreshToken refreshToken = refreshTokenService.createRefreshToken(authRequestDto.getUsername());
+                return new ResponseEntity(JWTResponseDto.builder()
+                        .accessToken(jwtService.generateToken(authRequestDto.getUsername()))
+                        .token(refreshToken.getToken())
+                        .build(), HttpStatus.OK);
+            }else {
+                return new ResponseEntity("Could not authenticate", HttpStatus.BAD_REQUEST);
+            }
+        } catch (AuthenticationException e) {
+            log.error("Error: {}", e.getMessage());
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 

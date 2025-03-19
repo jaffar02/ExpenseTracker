@@ -15,5 +15,18 @@ spring:
     show-sql: true      # Optional: shows SQL queries in the console during development
     properties:
       hibernate:
-        format_sql: true
+        format_s  ql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+kafka:
+  topic:
+    name: testing_json
+  producer:
+    bootstrap-servers: localhost:2181
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: AuthService.serializer.UserInfoSerializer
+
+#  consumer:
+#    bootstrap-servers: localhost:2181
+#    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

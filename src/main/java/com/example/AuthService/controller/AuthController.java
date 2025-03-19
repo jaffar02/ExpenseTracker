@@ -42,7 +42,7 @@ public class AuthController {
                     .build(), HttpStatus.OK);
         }catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity("Exception in User Service", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity("Exception in User Service: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

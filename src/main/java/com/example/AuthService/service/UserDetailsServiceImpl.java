@@ -1,6 +1,7 @@
 package com.example.AuthService.service;
 
 import com.example.AuthService.entities.UserInfo;
+import com.example.AuthService.eventProducer.UserInfoProducer;
 import com.example.AuthService.model.UserInfoDto;
 import com.example.AuthService.repository.UserInfoRepository;
 import com.example.AuthService.util.UserInfoInputValidation;
@@ -25,6 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserInfoProducer userInfoProducer;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = userInfoRepository.findByUsername(username);
@@ -39,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public Boolean signupUser(UserInfoDto userInfoDto) throws IllegalArgumentException{
-        if (!userInfoDto.getEmail().isEmpty()) {
+        if (userInfoDto.getEmail() != null) {
             if (!UserInfoInputValidation.isEmailValid(userInfoDto.getEmail())){
                 throw new IllegalArgumentException("Invalid email format.");
             }
@@ -58,6 +62,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 userInfoDto.getUsername(),
                 userInfoDto.getPassword(),
                 new HashSet<>()));
+        userInfoProducer.sendEventToKafka(userInfoDto);
         return true;
     }
 }

@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(18)
 	}
 }
 
@@ -48,6 +48,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'junit:junit:4.13.2'
 	implementation 'org.postgresql:postgresql:42.7.4'
+	implementation 'org.springframework.kafka:spring-kafka:3.3.3'
 
 
 }
